@@ -19,7 +19,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario")
     private List<Tarefa> tarefas;
 
-    @OneToMany(mappedBy = "usuarios")
+    @OneToMany(mappedBy = "usuario")
     private List<Transacao> transacoes;
 
 
@@ -59,7 +59,7 @@ public class Usuario {
         return tarefas;
     }
 
-    public void setTarefas(List<Tarefas> tarefas) {
+    public void setTarefas(List<Tarefa> tarefas) {
         this.tarefas = tarefas;
     }
 
