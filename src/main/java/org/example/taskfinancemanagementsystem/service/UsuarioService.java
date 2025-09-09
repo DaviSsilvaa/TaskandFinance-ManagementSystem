@@ -1,5 +1,6 @@
 package org.example.taskfinancemanagementsystem.service;
 
+import jakarta.transaction.Transactional;
 import org.example.taskfinancemanagementsystem.dto.UsuarioDTO;
 import org.example.taskfinancemanagementsystem.model.Usuario;
 import org.example.taskfinancemanagementsystem.repository.UsuarioRepository;
@@ -24,7 +25,6 @@ public class UsuarioService {
         return usuarioRepository.findAll().stream()
                 .map(usuario -> {
                     UsuarioDTO dto = new UsuarioDTO();
-                    dto.setId(usuario.getId());
                     dto.setNome(usuario.getNome());
                     dto.setEmail(usuario.getEmail());
                     return dto;
@@ -35,7 +35,6 @@ public class UsuarioService {
     public UsuarioDTO getUsuarioById(Long id) {
         Usuario usuario = usuarioRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
         UsuarioDTO dto = new UsuarioDTO();
-        dto.setId(usuario.getId());
         dto.setNome(usuario.getNome());
         dto.setEmail(usuario.getEmail());
         return dto;
@@ -46,5 +45,30 @@ public class UsuarioService {
         usuario.setSenha(encodedPassword);
         usuarioRepository.save(usuario);
     }
+
+    @Transactional
+    public UsuarioDTO createUsuario(UsuarioDTO usuarioDTO) {
+        System.out.println("Recebendo dados: " + usuarioDTO);
+
+        Usuario usuario = new Usuario();
+        usuario.setNome(usuarioDTO.getNome());
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setSenha(passwordEncoder.encode(usuarioDTO.getSenha()));
+
+        try {
+            Usuario savedUsuario = usuarioRepository.save(usuario);
+            System.out.println("Usuário salvo: " + savedUsuario);
+            UsuarioDTO savedUsuarioDTO = new UsuarioDTO();
+            savedUsuarioDTO.setNome(savedUsuario.getNome());
+            savedUsuarioDTO.setEmail(savedUsuario.getEmail());
+            savedUsuarioDTO.setSenha(null);
+
+            return savedUsuarioDTO;
+        } catch (Exception e) {
+            System.out.println("Erro ao salvar usuário: " + e.getMessage());
+            throw e;
+        }
+    }
+
 }
 
