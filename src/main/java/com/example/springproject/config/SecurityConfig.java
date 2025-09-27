@@ -1,6 +1,8 @@
 package com.example.springproject.config;
 
-import com.example.springproject.service.CustomUserDetailsService;
+import com.example.springproject.security.JwtAuthenticationFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,14 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.example.springproject.security.JwtAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -31,43 +26,31 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new CustomUserDetailsService();
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    // Configuração de segurança
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         logger.info("Configuração de segurança aplicada");
 
         http
                 .csrf(AbstractHttpConfigurer::disable)
-
-                // Define a política de criação de sessão como SEM ESTADO
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-
                 .authorizeHttpRequests(authz -> authz
-                        // Permite o acesso a views e endpoints de autenticação sem token
-                        .requestMatchers("/", "/home", "/login", "/register", "/api/auth/login", "/api/auth/register").permitAll()
-
-                        // CRÍTICO: Protege APENAS endpoints da API REST, que exigirão o token no cabeçalho
+                        .requestMatchers(
+                                "/", "/home", "/login", "/register",
+                                "/api/auth/login", "/api/auth/register",
+                                // Endpoints do Swagger
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .requestMatchers("/api/**").authenticated()
-
-                        // Qualquer outra requisição que não seja /api/... será tratada como permitAll
-                        // ou você pode manter esta linha se tiver outras views que precisam de autenticação
                         .anyRequest().permitAll()
                 )
                 .logout(logout -> logout
@@ -76,7 +59,6 @@ public class SecurityConfig {
                         .permitAll()
                 );
 
-        // Adiciona o filtro JWT para processar o token em chamadas /api/**
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

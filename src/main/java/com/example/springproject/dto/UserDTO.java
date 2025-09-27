@@ -3,9 +3,8 @@ package com.example.springproject.dto;
 public class UserDTO {
     private String email;
     private String password;
-    private String name; // Pode ser opcional dependendo do seu caso
+    private String name;
 
-    // Getters e Setters
     public String getEmail() {
         return email;
     }

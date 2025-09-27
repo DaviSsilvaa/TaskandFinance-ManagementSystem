@@ -35,19 +35,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String userEmail = jwtTokenProvider.validateToken(jwt);
 
                 if (userEmail != null) {
-                    // Carregar dados do usuário e autenticar
                     UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
 
                     authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    // Define a autenticação no contexto do Spring Security
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }
         } catch (Exception ex) {
-            // Ignorar erros de token para permitir que outros filtros atuem ou retornar 401
             logger.error("Could not set user authentication in security context", ex);
         }
 
@@ -56,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        // Extrai o token do cabeçalho "Authorization: Bearer <token>"
+
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }

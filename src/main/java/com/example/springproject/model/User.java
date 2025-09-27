@@ -17,11 +17,9 @@ public class User implements UserDetails {
 
     private String email;
 
-    // CORREÇÃO: Mapeia o campo 'name' da entidade para a coluna 'nome' do banco
     @Column(name = "nome")
     private String name;
 
-    // CORREÇÃO: Mapeia o campo 'password' da entidade para a coluna 'senha' do banco
     @Column(name = "senha")
     private String password;
 
@@ -65,8 +63,6 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
-    // Getters e setters (Mantenha o resto inalterado, pois os métodos usam os nomes dos campos da entidade)
 
     public Long getId() {
         return id;

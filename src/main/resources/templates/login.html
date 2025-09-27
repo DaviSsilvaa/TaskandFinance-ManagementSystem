@@ -3,71 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Login de Usuário</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f9; margin: 0; }
+        .container { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h1 { text-align: center; color: #333; }
+        .form-group { margin-bottom: 1rem; }
+        label { display: block; margin-bottom: 0.5rem; color: #555; }
+        input { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 0.75rem; border: none; border-radius: 4px; background-color: #28a745; color: white; font-size: 1rem; cursor: pointer; transition: background-color 0.3s; }
+        button:hover { background-color: #218838; }
+        #message { text-align: center; margin-top: 1rem; font-weight: bold; }
+        .register-link { text-align: center; margin-top: 1rem; }
+        .register-link a { color: #007bff; text-decoration: none; }
+        .register-link a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
-<h1>Login de Usuário</h1>
 
-<form id="loginForm">
-    <div>
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" required>
-    </div>
+<div class="container">
+    <h1>Login</h1>
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
 
-    <div>
-        <label for="password">Senha:</label>
-        <input type="password" id="password" name="password" required>
-    </div>
+        <div class="form-group">
+            <label for="password">Senha:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
 
-    <div>
         <button type="submit">Entrar</button>
-    </div>
 
-    <p id="message" style="color: red;"></p>
-</form>
+        <p id="message"></p>
+    </form>
+    <div class="register-link">
+        <p>Não tem uma conta? <a href="/register">Registre-se</a></p>
+    </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const loginForm = document.getElementById('loginForm');
         const messageElement = document.getElementById('message');
 
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(event) {
-                event.preventDefault();
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
 
-                fetch('http://localhost:8080/api/auth/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email: email, password: password })
-                })
-                .then(response => response.text())
-                .then(data => {
-                    if (data.startsWith("Token gerado com sucesso:")) {
-                        messageElement.style.color = 'green';
-                        messageElement.innerText = "Login bem-sucedido! Aceder à área protegida...";
+            fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, password: password })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    // Se a resposta não for 2xx, lê o corpo como texto para a mensagem de erro
+                    return response.text().then(text => { throw new Error(text) });
+                }
+                return response.text();
+            })
+            .then(data => {
+                // Assumindo que o sucesso retorna o token diretamente ou com um prefixo
+                const token = data.includes(':') ? data.substring(data.indexOf(':') + 1).trim() : data;
+                localStorage.setItem('jwtToken', token);
 
-                        const token = data.substring("Token gerado com sucesso: ".length).trim();
-                        localStorage.setItem('jwtToken', token);
-
-                        // Redireciona para /home
-                        window.location.href = '/home';
-                    } else {
-                        messageElement.style.color = 'red';
-                        messageElement.innerText = data;
-                    }
-                })
-                .catch(error => {
-                    messageElement.style.color = 'red';
-                    messageElement.innerText = 'Erro de conexão ou servidor: ' + error.message;
-                    console.error('Erro de Login:', error);
-                });
+                messageElement.style.color = 'green';
+                messageElement.innerText = "Login bem-sucedido! A redirecionar...";
+                window.location.href = '/home';
+            })
+            .catch(error => {
+                messageElement.style.color = 'red';
+                messageElement.innerText = error.message; // Exibe o erro do backend (ex: "Credenciais inválidas")
+                console.error('Erro de Login:', error);
             });
-        }
+        });
     });
 </script>
+
 </body>
 </html>

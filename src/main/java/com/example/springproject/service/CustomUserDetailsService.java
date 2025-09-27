@@ -1,6 +1,6 @@
 package com.example.springproject.service;
 
-import com.example.springproject.model.User;  // Sua entidade JPA User
+import com.example.springproject.model.User;
 import com.example.springproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,16 +17,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
     @Autowired
-    private UserRepository userRepository;  // Repositório da sua classe User
+    private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;  // Encoder de senha (se necessário)
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         logger.info("Tentando carregar usuário com o e-mail: {}", email);
 
-        // Buscando o usuário no banco de dados
         User appUser = userRepository.findByEmail(email);
 
         if (appUser == null) {
@@ -38,8 +37,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return org.springframework.security.core.userdetails.User
                 .builder()
-                .username(appUser.getEmail())  // Email como username
-                .password(appUser.getPassword())  // A senha deve estar criptografada no banco
+                .username(appUser.getEmail())
+                .password(appUser.getPassword())
                 .roles("USER")
                 .build();
     }

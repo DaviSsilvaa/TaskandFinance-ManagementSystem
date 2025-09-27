@@ -3,34 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Página Inicial</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f4f4f9; color: #333; margin: 0; padding: 2rem; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #007bff; }
+        #userInfo { margin-bottom: 2rem; }
+        #logoutButton { padding: 0.5rem 1rem; border: none; border-radius: 4px; background-color: #dc3545; color: white; cursor: pointer; transition: background-color 0.3s; }
+        #logoutButton:hover { background-color: #c82333; }
+    </style>
 </head>
 <body>
-<h1>Bem-vindo!</h1>
-<p>O seu login foi bem-sucedido. Esta página é o destino após a autenticação.</p>
 
-<div id="content"></div>
+<div class="container">
+    <h1>Bem-vindo à sua Área Protegida</h1>
+    <p>Esta é a sua página principal. Apenas utilizadores autenticados podem vê-la.</p>
 
-<button onclick="logout()">Sair</button>
+    <div id="userInfo">
+        <p><strong>Token JWT Armazenado:</strong></p>
+        <p id="tokenDisplay" style="word-wrap: break-word; background: #eee; padding: 10px; border-radius: 4px;"></p>
+    </div>
+
+    <button id="logoutButton">Sair (Logout)</button>
+</div>
 
 <script>
-    // Função de Logout (remover token e redirecionar)
-    function logout() {
-        localStorage.removeItem('jwtToken');
-        // O navegador não precisa do POST para fazer logout, apenas precisa da URL.
-        window.location.href = '/login?logout=true';
-    }
-
-    // Simplesmente verifica se existe um token para mostrar que o usuário está "logado"
     document.addEventListener('DOMContentLoaded', function() {
         const token = localStorage.getItem('jwtToken');
+        const tokenDisplay = document.getElementById('tokenDisplay');
+        const logoutButton = document.getElementById('logoutButton');
+
         if (!token) {
-            // Se o usuário tentar acessar /home diretamente sem token, redireciona
+            // Se não houver token, redireciona para a página de login
             window.location.href = '/login';
         } else {
-            document.getElementById('content').innerHTML =
-                "<p style='color: green;'>Seu token está salvo no navegador e será usado para acessar APIs protegidas.</p>";
+            // Mostra o token na página (apenas para fins de demonstração)
+            tokenDisplay.innerText = token;
         }
+
+        logoutButton.addEventListener('click', function() {
+            // Limpa o token do armazenamento local
+            localStorage.removeItem('jwtToken');
+
+            // Redireciona para a página de login com uma mensagem de logout
+            window.location.href = '/login?logout=true';
+        });
     });
 </script>
+
 </body>
 </html>
