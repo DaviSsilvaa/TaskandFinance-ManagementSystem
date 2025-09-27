@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Inicial</title>
+</head>
+<body>
+<h1>Bem-vindo!</h1>
+<p>O seu login foi bem-sucedido. Esta página é o destino após a autenticação.</p>
+
+<div id="content"></div>
+
+<button onclick="logout()">Sair</button>
+
+<script>
+    // Função de Logout (remover token e redirecionar)
+    function logout() {
+        localStorage.removeItem('jwtToken');
+        // O navegador não precisa do POST para fazer logout, apenas precisa da URL.
+        window.location.href = '/login?logout=true';
+    }
+
+    // Simplesmente verifica se existe um token para mostrar que o usuário está "logado"
+    document.addEventListener('DOMContentLoaded', function() {
+        const token = localStorage.getItem('jwtToken');
+        if (!token) {
+            // Se o usuário tentar acessar /home diretamente sem token, redireciona
+            window.location.href = '/login';
+        } else {
+            document.getElementById('content').innerHTML =
+                "<p style='color: green;'>Seu token está salvo no navegador e será usado para acessar APIs protegidas.</p>";
+        }
+    });
+</script>
+</body>
+</html>

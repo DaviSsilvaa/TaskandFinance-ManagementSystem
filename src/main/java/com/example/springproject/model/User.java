@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @Entity
 @Table(name = "usuario")
@@ -15,22 +16,34 @@ public class User implements UserDetails {
     private Long id;
 
     private String email;
+
+    // CORREÇÃO: Mapeia o campo 'name' da entidade para a coluna 'nome' do banco
+    @Column(name = "nome")
     private String name;
+
+    // CORREÇÃO: Mapeia o campo 'password' da entidade para a coluna 'senha' do banco
+    @Column(name = "senha")
     private String password;
+
+    @Column(name = "failed_attempts")
+    private int failedAttempts;
+
+    @Column(name = "locked")
+    private boolean locked;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;  // Sem papéis específicos por enquanto
+        return Collections.emptyList();
     }
 
     @Override
     public String getPassword() {
-        return password;  // A senha correta
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return email;  // O email do usuário será usado como nome de usuário
+        return email;
     }
 
     @Override
@@ -40,7 +53,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked;
     }
 
     @Override
@@ -53,14 +66,48 @@ public class User implements UserDetails {
         return true;
     }
 
+    // Getters e setters (Mantenha o resto inalterado, pois os métodos usam os nomes dos campos da entidade)
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public String getSenha() {
-        return password;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    // Getters and Setters (caso precise)
-}
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public int getFailedAttempts() {
+        return failedAttempts;
+    }
+
+    public void setFailedAttempts(int failedAttempts) {
+        this.failedAttempts = failedAttempts;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+}

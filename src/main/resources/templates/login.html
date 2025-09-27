@@ -1,26 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="pt">
 <head>
-    <title>Login</title>
+    <meta charset="UTF-8">
+    <title>Login de Usuário</title>
 </head>
 <body>
+<h1>Login de Usuário</h1>
 
-<h1>Login</h1>
+<form id="loginForm">
+    <div>
+        <label for="email">E-mail:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
 
-<form id="login-form" action="/login" method="POST">
-    <label for="email">E-mail:</label>
-    <input type="email" id="email" name="email" required><br><br>
+    <div>
+        <label for="password">Senha:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
 
-    <label for="password">Senha:</label>
-    <input type="password" id="password" name="password" required><br><br>
+    <div>
+        <button type="submit">Entrar</button>
+    </div>
 
-    <button type="submit">Login</button>
+    <p id="message" style="color: red;"></p>
 </form>
 
-<!-- Mensagem de erro, se houver falha no login -->
-<div th:if="${param.error}">
-    <p style="color: red;">Credenciais inválidas. Tente novamente.</p>
-</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('loginForm');
+        const messageElement = document.getElementById('message');
 
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                fetch('http://localhost:8080/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: email, password: password })
+                })
+                .then(response => response.text())
+                .then(data => {
+                    if (data.startsWith("Token gerado com sucesso:")) {
+                        messageElement.style.color = 'green';
+                        messageElement.innerText = "Login bem-sucedido! Aceder à área protegida...";
+
+                        const token = data.substring("Token gerado com sucesso: ".length).trim();
+                        localStorage.setItem('jwtToken', token);
+
+                        // Redireciona para /home
+                        window.location.href = '/home';
+                    } else {
+                        messageElement.style.color = 'red';
+                        messageElement.innerText = data;
+                    }
+                })
+                .catch(error => {
+                    messageElement.style.color = 'red';
+                    messageElement.innerText = 'Erro de conexão ou servidor: ' + error.message;
+                    console.error('Erro de Login:', error);
+                });
+            });
+        }
+    });
+</script>
 </body>
 </html>
