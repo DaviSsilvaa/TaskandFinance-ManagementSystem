@@ -42,9 +42,7 @@ app:
     expiration: 86400000
 
 4) Rodar a aplicação
-mvn spring-boot:run
-# ou
-./mvnw spring-boot:run
+Executar TaskFinanceApplication
 
 <p>A API sobe em: <code>http://localhost:8080</code></p>
 🧪 Dados iniciais (categorias)
