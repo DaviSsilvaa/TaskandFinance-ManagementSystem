@@ -1,58 +1,20 @@
 Task Finance Management System API
-
-API para gestão de tarefas e finanças, com autenticação via JWT. Permite cadastro/login de usuários, CRUD de tarefas e transações, e relatórios financeiros.
-
+<p>API para gestão de <strong>tarefas</strong> e <strong>finanças</strong>, com autenticação via <strong>JWT</strong>. Permite cadastro/login de usuários, CRUD de tarefas e transações, e relatórios financeiros.</p>
 ✨ Funcionalidades
-
-Autenticação e registro de usuários (JWT + BCrypt)
-
-CRUD de Tarefas
-
-CRUD de Transações com Categorias
-
-Relatórios: Mensal e Resumo geral
-
-Endpoints REST com Spring Web
-
-Persistência com Spring Data JPA (PostgreSQL)
-
+<p>• Autenticação e registro de usuários (JWT + BCrypt)<br/> • CRUD de <strong>Tarefas</strong><br/> • CRUD de <strong>Transações</strong> com <strong>Categorias</strong><br/> • Relatórios: <strong>Mensal</strong> e <strong>Resumo geral</strong><br/> • Endpoints REST com <strong>Spring Web</strong><br/> • Persistência com <strong>Spring Data JPA</strong> (PostgreSQL)</p>
 🧰 Tecnologias
-
-Java 21
-
-Spring Boot 3.5.x
-
-Spring Security
-
-Spring Data JPA
-
-PostgreSQL
-
-BCrypt
-
-Maven
-
+<p><strong>Java 21</strong> • <strong>Spring Boot 3.5.x</strong> • <strong>Spring Security</strong> • <strong>Spring Data JPA</strong> • <strong>PostgreSQL</strong> • <strong>BCrypt</strong> • <strong>Maven</strong></p>
 🚀 Como executar
 1) Pré-requisitos
-
-Java 21
-
-Maven 3.9+
-
-PostgreSQL em execução
-
+<p>• Java 21<br/> • Maven 3.9+<br/> • PostgreSQL em execução</p>
 2) Configurar o banco
-
-Crie um banco e um usuário (exemplo):
-
 CREATE DATABASE taskfinance;
 CREATE USER taskfinance_user WITH ENCRYPTED PASSWORD 'strong_password';
 GRANT ALL PRIVILEGES ON DATABASE taskfinance TO taskfinance_user;
 
-3) Configurar aplicação
-
-Se usar application.properties:
-
+3) Configurar a aplicação
+<p>Use <code>application.properties</code> <em>ou</em> <code>application.yml</code>:</p>
+# application.properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/taskfinance
 spring.datasource.username=taskfinance_user
 spring.datasource.password=strong_password
@@ -63,9 +25,7 @@ spring.jpa.show-sql=true
 app.jwt.secret=troque-por-uma-chave-secreta-grande
 app.jwt.expiration=86400000
 
-
-Se preferir application.yml:
-
+# application.yml
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/taskfinance
@@ -82,37 +42,23 @@ app:
     expiration: 86400000
 
 4) Rodar a aplicação
-
-Via Maven:
-
 mvn spring-boot:run
-
-
-Ou com wrapper:
-
+# ou
 ./mvnw spring-boot:run
 
-
-A API sobe em: http://localhost:8080
-
-🧪 Populando categorias iniciais (opcional)
-
-Insira algumas categorias para usar nas transações:
-
+<p>A API sobe em: <code>http://localhost:8080</code></p>
+🧪 Dados iniciais (categorias)
+<p>Opcional: insira categorias para usar nas transações.</p>
 INSERT INTO category (name) VALUES ('Alimentação');
 INSERT INTO category (name) VALUES ('Transporte');
 INSERT INTO category (name) VALUES ('Lazer');
 
-🔐 Autenticação
-
-A autenticação é feita via JWT. Obtenha um token no login e envie em cada requisição protegida:
-
+🔐 Autenticação (JWT)
+<p>Envie o token em cada requisição protegida:</p>
 Authorization: Bearer <seu_token_jwt>
 
 Registro
-
-POST /api/auth/register
-
+<p><code>POST /api/auth/register</code></p>
 {
   "email": "novo.usuario@exemplo.com",
   "password": "senhaSegura123",
@@ -120,17 +66,13 @@ POST /api/auth/register
 }
 
 Login
-
-POST /api/auth/login
-
+<p><code>POST /api/auth/login</code></p>
 {
   "email": "novo.usuario@exemplo.com",
   "password": "senhaSegura123"
 }
 
-
-Resposta esperada (exemplo):
-
+<p><strong>Resposta (exemplo):</strong></p>
 {
   "token": "jwt_aqui",
   "type": "Bearer"
@@ -138,19 +80,7 @@ Resposta esperada (exemplo):
 
 📚 Endpoints
 1) Tarefas (requer JWT)
-
-GET /api/tasks — Lista todas as tarefas do usuário autenticado
-
-POST /api/tasks — Cria nova tarefa
-
-GET /api/tasks/{id} — Detalha uma tarefa
-
-PUT /api/tasks/{id} — Atualiza uma tarefa
-
-DELETE /api/tasks/{id} — Exclui uma tarefa
-
-Exemplo de criação:
-
+<p> GET <code>/api/tasks</code> — Lista tarefas do usuário<br/> POST <code>/api/tasks</code> — Cria tarefa<br/> GET <code>/api/tasks/{id}</code> — Detalha tarefa<br/> PUT <code>/api/tasks/{id}</code> — Atualiza tarefa<br/> DELETE <code>/api/tasks/{id}</code> — Exclui tarefa </p> <p><strong>Exemplo (criar):</strong></p>
 curl -X POST http://localhost:8080/api/tasks \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <TOKEN>" \
@@ -162,19 +92,7 @@ curl -X POST http://localhost:8080/api/tasks \
   }'
 
 2) Transações (requer JWT)
-
-GET /api/transactions — Lista transações do usuário
-
-POST /api/transactions — Cadastra transação
-
-GET /api/transactions/{id} — Detalha transação
-
-PUT /api/transactions/{id} — Atualiza transação
-
-DELETE /api/transactions/{id} — Exclui transação
-
-Exemplo de criação:
-
+<p> GET <code>/api/transactions</code> — Lista transações<br/> POST <code>/api/transactions</code> — Cadastra transação<br/> GET <code>/api/transactions/{id}</code> — Detalha transação<br/> PUT <code>/api/transactions/{id}</code> — Atualiza transação<br/> DELETE <code>/api/transactions/{id}</code> — Exclui transação </p> <p><strong>Exemplo (criar):</strong></p>
 curl -X POST http://localhost:8080/api/transactions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <TOKEN>" \
@@ -186,17 +104,9 @@ curl -X POST http://localhost:8080/api/transactions \
     "description": "Almoço"
   }'
 
-
-Observação: Garanta que categoryId exista (veja as inserções SQL acima).
-
+<p><em>Observação:</em> garanta que o <code>categoryId</code> exista (veja o SQL acima).</p>
 3) Relatórios (requer JWT)
-
-GET /api/reports/monthly?year={int}&month={int} — Relatório financeiro do mês
-
-GET /api/reports/summary — Resumo geral (saldo, total receitas/despesas)
-
-Exemplos:
-
+<p> GET <code>/api/reports/monthly?year={int}&month={int}</code> — Relatório do mês<br/> GET <code>/api/reports/summary</code> — Resumo geral (saldo, total receitas/despesas) </p>
 # Mensal de Setembro/2025
 curl -H "Authorization: Bearer <TOKEN>" \
   "http://localhost:8080/api/reports/monthly?year=2025&month=9"
@@ -205,7 +115,7 @@ curl -H "Authorization: Bearer <TOKEN>" \
 curl -H "Authorization: Bearer <TOKEN>" \
   http://localhost:8080/api/reports/summary
 
-🧱 Estrutura (sugerida)
+🧱 Estrutura do projeto (sugerida)
 src/
   main/
     java/
@@ -220,19 +130,3 @@ src/
         security/        # JwtUtil, JwtFilter, UserDetailsService
     resources/
       application.properties|yml
-
-🧷 Boas práticas & notas
-
-Senhas são armazenadas com BCrypt
-
-Garanta que o JWT secret seja seguro e privado (não versionar em repositório público)
-
-Use profiles (application-dev.yml, application-prod.yml) se necessário
-
-Em produção, configurar:
-
-CORS restrito
-
-HTTPS (proxy ou server TLS)
-
-Migrations (Flyway/Liquibase) para versionar o schema
