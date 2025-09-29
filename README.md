@@ -1,108 +1,238 @@
-<h1 align="center">🚀 Sistema de Gestão de Tarefas e Finanças - API</h1>
+Task Finance Management System API
 
-<p align="center">
-Uma API RESTful completa para o gerenciamento de tarefas e finanças pessoais, desenvolvida com Spring Boot.
-</p>
-<p align="center">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/status-conclu%C3%ADdo-green%3Fstyle%3Dfor-the-badge" alt="Status do Projeto: Concluído"/>
-</p>
+API para gestão de tarefas e finanças, com autenticação via JWT. Permite cadastro/login de usuários, CRUD de tarefas e transações, e relatórios financeiros.
 
-📋 Índice
-✨ Funcionalidades Principais
+✨ Funcionalidades
 
-🛠️ Tecnologias Utilizadas
+Autenticação e registro de usuários (JWT + BCrypt)
 
-⚙️ Guia de Instalação e Execução
+CRUD de Tarefas
 
-Pré-requisitos
+CRUD de Transações com Categorias
 
-Configuração do Banco de Dados
+Relatórios: Mensal e Resumo geral
 
-Executando a Aplicação
+Endpoints REST com Spring Web
 
-🔌 Como Usar a API
+Persistência com Spring Data JPA (PostgreSQL)
 
-Autenticação e Autorização
+🧰 Tecnologias
 
-Endpoints da API
+Java 21
 
-✨ Funcionalidades Principais
-✅ Autenticação Segura: Sistema de registro e login com autenticação baseada em JWT.
+Spring Boot 3.5.x
 
-✅ Gestão de Tarefas: CRUD completo para tarefas com títulos, descrições, prazos e prioridades.
+Spring Security
 
-✅ Controle Financeiro: CRUD completo para transações (receitas/despesas) associadas a categorias.
+Spring Data JPA
 
-✅ Relatórios: Geração de relatórios financeiros mensais e resumos gerais.
+PostgreSQL
 
-✅ Segurança: Acesso a dados restrito por usuário autenticado.
+BCrypt
 
-🛠️ Tecnologias Utilizadas
-<p align="center">
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Java-21-orange%3Fstyle%3Dfor-the-badge%26logo%3Dopenjdk%26logoColor%3Dwhite" />
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Spring_Boot-3.3.0-6DB33F%3Fstyle%3Dfor-the-badge%26logo%3Dspring-boot%26logoColor%3Dwhite" />
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Spring_Security-6.3-6DB33F%3Fstyle%3Dfor-the-badge%26logo%3Dspring-security%26logoColor%3Dwhite" />
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/PostgreSQL-42475E%3Fstyle%3Dfor-the-badge%26logo%3Dpostgresql%26logoColor%3Dwhite" />
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/JWT-000000%3Fstyle%3Dfor-the-badge%26logo%3Djsonwebtokens%26logoColor%3Dwhite" />
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Maven-C71A36%3Fstyle%3Dfor-the-badge%26logo%3Dapache-maven%26logoColor%3Dwhite" />
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Swagger-85EA2D%3Fstyle%3Dfor-the-badge%26logo%3Dswagger%26logoColor%3Dblack" />
-</p>
+Maven
 
-⚙️ Guia de Instalação e Execução
-Siga os passos abaixo para configurar e executar o projeto localmente.
+🚀 Como executar
+1) Pré-requisitos
 
-1. Pré-requisitos
-Java JDK 21 ou superior.
+Java 21
 
-Maven 3.8 ou superior.
+Maven 3.9+
 
-PostgreSQL instalado e em execução.
+PostgreSQL em execução
 
-Um cliente de API como o Postman ou o Insomnia.
+2) Configurar o banco
 
-2. Configuração do Banco de Dados
-Crie a Base de Dados:
-No PostgreSQL, crie uma nova base de dados com o nome task_finance.
+Crie um banco e um usuário (exemplo):
 
-Configure a Conexão:
-Abra o ficheiro src/main/resources/application.properties e atualize com os seus dados:
+CREATE DATABASE taskfinance;
+CREATE USER taskfinance_user WITH ENCRYPTED PASSWORD 'strong_password';
+GRANT ALL PRIVILEGES ON DATABASE taskfinance TO taskfinance_user;
 
-spring.datasource.url=jdbc:postgresql://localhost:5432/task_finance
-spring.datasource.username=seu_usuario_postgres
-spring.datasource.password=sua_senha_postgres
+3) Configurar aplicação
 
-Popule as Categorias (Obrigatório):
-Execute o seguinte script SQL na sua base de dados para criar as categorias iniciais:
+Se usar application.properties:
 
-INSERT INTO category (name) VALUES ('Alimentação'), ('Transporte'), ('Lazer'), ('Moradia'), ('Salário');
+spring.datasource.url=jdbc:postgresql://localhost:5432/taskfinance
+spring.datasource.username=taskfinance_user
+spring.datasource.password=strong_password
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
 
-3. Executando a Aplicação
-Clone o Repositório:
+# JWT (exemplo)
+app.jwt.secret=troque-por-uma-chave-secreta-grande
+app.jwt.expiration=86400000
 
-git clone [https://github.com/seu-usuario/task-finance-management-system.git](https://github.com/seu-usuario/task-finance-management-system.git)
-cd task-finance-management-system
 
-Execute a Aplicação (via Maven Wrapper):
+Se preferir application.yml:
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/taskfinance
+    username: taskfinance_user
+    password: strong_password
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+app:
+  jwt:
+    secret: troque-por-uma-chave-secreta-grande
+    expiration: 86400000
+
+4) Rodar a aplicação
+
+Via Maven:
+
+mvn spring-boot:run
+
+
+Ou com wrapper:
 
 ./mvnw spring-boot:run
 
-A API estará disponível em http://localhost:8080.
 
-🔌 Como Usar a API
-1. Autenticação e Autorização
-Passo 1: Registre um Usuário
-Faça uma requisição POST para /api/auth/register com o corpo:
+A API sobe em: http://localhost:8080
+
+🧪 Populando categorias iniciais (opcional)
+
+Insira algumas categorias para usar nas transações:
+
+INSERT INTO category (name) VALUES ('Alimentação');
+INSERT INTO category (name) VALUES ('Transporte');
+INSERT INTO category (name) VALUES ('Lazer');
+
+🔐 Autenticação
+
+A autenticação é feita via JWT. Obtenha um token no login e envie em cada requisição protegida:
+
+Authorization: Bearer <seu_token_jwt>
+
+Registro
+
+POST /api/auth/register
 
 {
-    "name": "Nome do Utilizador",
-    "email": "novo.usuario@exemplo.com",
-    "password": "senhaSegura123"
+  "email": "novo.usuario@exemplo.com",
+  "password": "senhaSegura123",
+  "name": "Nome do Utilizador"
 }
 
-Passo 2: Faça Login para Obter o Token
-Faça uma requisição POST para /api/auth/login com o corpo:
+Login
+
+POST /api/auth/login
 
 {
-    "email": "novo.usuario@exemplo.com",
-    "password": "senhaSegura123"
+  "email": "novo.usuario@exemplo.com",
+  "password": "senhaSegura123"
 }
+
+
+Resposta esperada (exemplo):
+
+{
+  "token": "jwt_aqui",
+  "type": "Bearer"
+}
+
+📚 Endpoints
+1) Tarefas (requer JWT)
+
+GET /api/tasks — Lista todas as tarefas do usuário autenticado
+
+POST /api/tasks — Cria nova tarefa
+
+GET /api/tasks/{id} — Detalha uma tarefa
+
+PUT /api/tasks/{id} — Atualiza uma tarefa
+
+DELETE /api/tasks/{id} — Exclui uma tarefa
+
+Exemplo de criação:
+
+curl -X POST http://localhost:8080/api/tasks \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{
+    "title": "Estudar Spring Security",
+    "description": "Revisar filtros e JWT",
+    "dueDate": "2025-10-05",
+    "status": "PENDING"
+  }'
+
+2) Transações (requer JWT)
+
+GET /api/transactions — Lista transações do usuário
+
+POST /api/transactions — Cadastra transação
+
+GET /api/transactions/{id} — Detalha transação
+
+PUT /api/transactions/{id} — Atualiza transação
+
+DELETE /api/transactions/{id} — Exclui transação
+
+Exemplo de criação:
+
+curl -X POST http://localhost:8080/api/transactions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{
+    "amount": 120.50,
+    "type": "EXPENSE",
+    "date": "2025-09-29",
+    "categoryId": 1,
+    "description": "Almoço"
+  }'
+
+
+Observação: Garanta que categoryId exista (veja as inserções SQL acima).
+
+3) Relatórios (requer JWT)
+
+GET /api/reports/monthly?year={int}&month={int} — Relatório financeiro do mês
+
+GET /api/reports/summary — Resumo geral (saldo, total receitas/despesas)
+
+Exemplos:
+
+# Mensal de Setembro/2025
+curl -H "Authorization: Bearer <TOKEN>" \
+  "http://localhost:8080/api/reports/monthly?year=2025&month=9"
+
+# Resumo geral
+curl -H "Authorization: Bearer <TOKEN>" \
+  http://localhost:8080/api/reports/summary
+
+🧱 Estrutura (sugerida)
+src/
+  main/
+    java/
+      org/example/taskfinancemanagementsystem/
+        TaskFinanceApplication.java
+        config/          # Security, JWT filters, CORS
+        controller/      # Controllers REST
+        dto/             # DTOs de request/response
+        model/           # Entidades JPA (Usuario, Tarefa, Transacao, Category)
+        repository/      # Interfaces JPA
+        service/         # Regra de negócio
+        security/        # JwtUtil, JwtFilter, UserDetailsService
+    resources/
+      application.properties|yml
+
+🧷 Boas práticas & notas
+
+Senhas são armazenadas com BCrypt
+
+Garanta que o JWT secret seja seguro e privado (não versionar em repositório público)
+
+Use profiles (application-dev.yml, application-prod.yml) se necessário
+
+Em produção, configurar:
+
+CORS restrito
+
+HTTPS (proxy ou server TLS)
+
+Migrations (Flyway/Liquibase) para versionar o schema
