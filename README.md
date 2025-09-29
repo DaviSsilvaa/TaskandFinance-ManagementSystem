@@ -90,8 +90,7 @@ curl -H "Authorization: Bearer <TOKEN>" \
   "http://localhost:8080/api/reports/monthly?year=2025&month=9"
 
 # Resumo geral
-curl -H "Authorization: Bearer <TOKEN>" \
-  http://localhost:8080/api/reports/summary
+  http://localhost:8080/swagger-ui/index.html
 
 🧱 Estrutura do projeto (sugerida)
 src/
