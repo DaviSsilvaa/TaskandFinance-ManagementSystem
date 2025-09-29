@@ -1,7 +1,3 @@
-<div align="center">
-<img src="https://github.com/user-attachments/assets/bc078890-dbda-4a77-8a35-8f6c127987a7" alt="Banner do projeto com um desenvolvedor a programar" width="600"/>
-</div>
-
 <h1 align="center">🚀 Sistema de Gestão de Tarefas e Finanças - API</h1>
 
 <p align="center">
