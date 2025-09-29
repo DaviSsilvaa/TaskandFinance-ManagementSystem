@@ -21,26 +21,6 @@ spring.datasource.password=strong_password
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 
-# JWT (exemplo)
-app.jwt.secret=troque-por-uma-chave-secreta-grande
-app.jwt.expiration=86400000
-
-# application.yml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/taskfinance
-    username: taskfinance_user
-    password: strong_password
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-
-app:
-  jwt:
-    secret: troque-por-uma-chave-secreta-grande
-    expiration: 86400000
-
 4) Rodar a aplicação
 Executar TaskFinanceApplication
 
