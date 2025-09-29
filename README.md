@@ -13,7 +13,7 @@ Este projeto fornece uma API para o gerenciamento de tarefas e finanças, permit
 
 ## Instruções de Execução
 
-Apenas rodar o TaskFinanceApplication
+Rodar TaskFinanceApplication
 
 O Bd é em PostGre, cria um register com essa requisição, email, senha, e nome
 
@@ -34,6 +34,35 @@ Login	http://localhost:8080/api/auth/login	POST	JSON (E-mail/Senha)
     "password": "senhaSegura123",
 }
 
+2. Gestão de Tarefas (Requer JWT)
+
+GET	/api/tasks	Retorna todas as tarefas do utilizador autenticado.
+POST	/api/tasks	Cria uma nova tarefa.
+GET	/api/tasks/{id}	Retorna os detalhes de uma tarefa específica pelo ID.
+PUT	/api/tasks/{id}	Atualiza uma tarefa específica pelo ID.
+DELETE	/api/tasks/{id}	Exclui uma tarefa específica pelo ID.
+
+3. Gestão de Finanças (Requer JWT)
+
+GET	/api/transactions	Retorna a lista de todas as transações do utilizador autenticado.
+POST	/api/transactions	Cadastra uma nova transação.
+GET	/api/transactions/{id}	Retorna os detalhes de uma transação específica pelo ID.
+PUT	/api/transactions/{id}	Atualiza uma transação específica pelo ID.
+DELETE	/api/transactions/{id}	Exclui uma transação específica pelo ID.
+
+4. Relatórios e Gráficos (Requer JWT)
+
+GET	/api/reports/monthly	year (int), month (int)	Retorna um relatório financeiro mensal detalhado.
+GET	/api/reports/summary	Nenhum	Retorna um resumo financeiro geral (saldos, total de receitas/despesas).
+
+
+É necessário inserir dados no BD, para transactions
+
+
+-- Insere as novas categorias
+INSERT INTO category (name) VALUES ('Alimentação');
+INSERT INTO category (name) VALUES ('Transporte');
+INSERT INTO category (name) VALUES ('Lazer');
 
 ### 1. Clonando o Repositório
 
