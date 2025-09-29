@@ -1,73 +1,111 @@
-# Task Finance Management System API
+Sistema de Gestão de Tarefas e Finanças - API
+Este projeto é uma API RESTful completa para o gerenciamento de tarefas e finanças pessoais, desenvolvida com Spring Boot. A API permite que os usuários se registrem, autentiquem, gerenciem suas tarefas diárias e controlem suas transações financeiras de maneira integrada e segura.
 
-Este projeto fornece uma API para o gerenciamento de tarefas e finanças, permitindo que usuários possam gerenciar suas tarefas de forma simples e eficiente. A API inclui recursos como autenticação de usuários, gerenciamento de usuários, e a interação com dados de tarefas e finanças.
+Funcionalidades Principais
+Autenticação Segura: Sistema de registro e login com autenticação baseada em JWT (JSON Web Tokens).
 
-## Tecnologias Utilizadas
+Gestão de Tarefas: Crie, liste, atualize e apague tarefas com títulos, descrições, prazos e prioridades.
 
-- **Spring Boot**: Framework para desenvolvimento da aplicação.
-- **Spring Security**: Segurança e autenticação de usuários.
-- **Spring Data JPA**: Integração com banco de dados PostgreSQL.
-- **PostgreSQL**: Banco de dados utilizado.
-- **BCrypt**: Criptografia de senhas.
-- **Spring Web**: Para construção de endpoints RESTful.
+Controle Financeiro: Cadastre receitas e despesas, associe transações a categorias e monitore suas finanças.
 
-## Instruções de Execução
+Relatórios: Gere relatórios financeiros mensais e resumos gerais para visualizar seus gastos.
 
-Rodar TaskFinanceApplication
+Segurança: Acesso a dados pessoais (tarefas e finanças) protegido e restrito a cada usuário autenticado.
 
-O Bd é em PostGre, cria um register com essa requisição, email, senha, e nome
+Tecnologias Utilizadas
+Backend:
 
-POST	http://localhost:8080/api/auth/register	Cria um novo utilizador no sistema.
+Spring Boot: Framework principal para o desenvolvimento da aplicação.
 
-{
-    "email": "novo.usuario@exemplo.com",
-    "password": "senhaSegura123",
-    "name": "Nome do Utilizador"
-}
+Spring Security: Para implementação da segurança e autenticação de usuários.
 
-Aqui você loga com o email e senha
+Spring Data JPA: Para a camada de persistência e integração com o banco de dados.
 
-Login	http://localhost:8080/api/auth/login	POST	JSON (E-mail/Senha)
+JWT (JSON Web Tokens): Para a autenticação stateless da API.
 
-{
-    "email": "novo.usuario@exemplo.com",
-    "password": "senhaSegura123",
-}
+Banco de Dados:
 
-2. Gestão de Tarefas (Requer JWT)
+PostgreSQL: Banco de dados relacional utilizado para armazenar os dados.
 
-GET	/api/tasks	Retorna todas as tarefas do utilizador autenticado.
-POST	/api/tasks	Cria uma nova tarefa.
-GET	/api/tasks/{id}	Retorna os detalhes de uma tarefa específica pelo ID.
-PUT	/api/tasks/{id}	Atualiza uma tarefa específica pelo ID.
-DELETE	/api/tasks/{id}	Exclui uma tarefa específica pelo ID.
+Segurança de Senhas:
 
-3. Gestão de Finanças (Requer JWT)
+BCrypt: Algoritmo para criptografia segura de senhas.
 
-GET	/api/transactions	Retorna a lista de todas as transações do utilizador autenticado.
-POST	/api/transactions	Cadastra uma nova transação.
-GET	/api/transactions/{id}	Retorna os detalhes de uma transação específica pelo ID.
-PUT	/api/transactions/{id}	Atualiza uma transação específica pelo ID.
-DELETE	/api/transactions/{id}	Exclui uma transação específica pelo ID.
+Documentação e Build:
 
-4. Relatórios e Gráficos (Requer JWT)
+Springdoc-openapi (Swagger): Geração de documentação interativa para a API.
 
-GET	/api/reports/monthly	year (int), month (int)	Retorna um relatório financeiro mensal detalhado.
-GET	/api/reports/summary	Nenhum	Retorna um resumo financeiro geral (saldos, total de receitas/despesas).
+Maven: Gerenciador de dependências e build do projeto.
 
+Guia de Instalação e Execução
+Siga os passos abaixo para configurar e executar o projeto localmente.
 
-É necessário inserir dados no BD, para transactions
+1. Pré-requisitos
+Java JDK 21 ou superior.
 
+Maven 3.8 ou superior.
+
+PostgreSQL instalado e em execução.
+
+Um cliente de API como o Postman ou o Insomnia para testar os endpoints.
+
+2. Configuração do Banco de Dados
+Crie um Banco de Dados:
+No PostgreSQL, crie uma nova base de dados. Por exemplo, com o nome task_finance.
+
+Configure a Conexão:
+Abra o ficheiro src/main/resources/application.properties e atualize as seguintes propriedades com os seus dados de acesso ao PostgreSQL:
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/task_finance
+spring.datasource.username=seu_usuario_postgres
+spring.datasource.password=sua_senha_postgres
+
+Popule as Categorias Iniciais (Obrigatório):
+Para que o cadastro de transações funcione, é necessário ter categorias no banco de dados. Execute o seguinte script SQL na sua base de dados:
 
 -- Insere as novas categorias
 INSERT INTO category (name) VALUES ('Alimentação');
 INSERT INTO category (name) VALUES ('Transporte');
 INSERT INTO category (name) VALUES ('Lazer');
+INSERT INTO category (name) VALUES ('Moradia');
+INSERT INTO category (name) VALUES ('Salário');
 
-### 1. Clonando o Repositório
+3. Clonando o Repositório
+Clone este repositório para sua máquina local:
 
-Para iniciar o projeto, clone este repositório para sua máquina local:
-
-```bash
-git clone https://github.com/seu-usuario/task-finance-management-system.git
+git clone [https://github.com/seu-usuario/task-finance-management-system.git](https://github.com/seu-usuario/task-finance-management-system.git)
 cd task-finance-management-system
+
+4. Executando a Aplicação
+Você pode executar a aplicação de duas formas:
+
+Via Terminal (com Maven Wrapper):
+
+./mvnw spring-boot:run
+
+Pela sua IDE (IntelliJ/Eclipse):
+
+Importe o projeto como um projeto Maven.
+
+Encontre a classe TaskFinanceApplication.java e execute o método main.
+
+A API estará disponível em http://localhost:8080.
+
+Como Usar a API
+1. Autenticação
+Primeiro, crie um usuário e faça login para obter um token JWT.
+
+POST /api/auth/register - Cria um novo usuário.
+
+{
+    "name": "Nome do Utilizador",
+    "email": "novo.usuario@exemplo.com",
+    "password": "senhaSegura123"
+}
+
+POST /api/auth/login - Autentica um usuário e retorna um token JWT.
+
+{
+    "email": "novo.usuario@exemplo.com",
+    "password": "senhaSegura123"
+}
