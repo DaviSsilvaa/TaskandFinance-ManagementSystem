@@ -1,60 +1,56 @@
-🚀 Sistema de Gestão de Tarefas e Finanças - API
-Este projeto é uma API RESTful completa para o gerenciamento de tarefas e finanças pessoais, desenvolvida com Spring Boot. A API permite que os usuários se registrem, autentiquem, gerenciem suas tarefas diárias e controlem suas transações financeiras de maneira integrada e segura.
+<div align="center">
+<img src="https://github.com/user-attachments/assets/bc078890-dbda-4a77-8a35-8f6c127987a7" alt="Banner do projeto com um desenvolvedor a programar" width="600"/>
+</div>
+
+<h1 align="center">🚀 Sistema de Gestão de Tarefas e Finanças - API</h1>
+
+<p align="center">
+Uma API RESTful completa para o gerenciamento de tarefas e finanças pessoais, desenvolvida com Spring Boot.
+</p>
+<p align="center">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/status-conclu%C3%ADdo-green%3Fstyle%3Dfor-the-badge" alt="Status do Projeto: Concluído"/>
+</p>
 
 📋 Índice
-Funcionalidades Principais
+✨ Funcionalidades Principais
 
-Tecnologias Utilizadas
+🛠️ Tecnologias Utilizadas
 
-Guia de Instalação e Execução
+⚙️ Guia de Instalação e Execução
 
 Pré-requisitos
 
 Configuração do Banco de Dados
 
-Clonando o Repositório
-
 Executando a Aplicação
 
-Como Usar a API
+🔌 Como Usar a API
 
-Autenticação
-
-Autorização
+Autenticação e Autorização
 
 Endpoints da API
 
 ✨ Funcionalidades Principais
-✅ Autenticação Segura: Sistema de registro e login com autenticação baseada em JWT (JSON Web Tokens).
+✅ Autenticação Segura: Sistema de registro e login com autenticação baseada em JWT.
 
-✅ Gestão de Tarefas: Crie, liste, atualize e apague tarefas com títulos, descrições, prazos e prioridades.
+✅ Gestão de Tarefas: CRUD completo para tarefas com títulos, descrições, prazos e prioridades.
 
-✅ Controle Financeiro: Cadastre receitas e despesas, associe transações a categorias e monitore suas finanças.
+✅ Controle Financeiro: CRUD completo para transações (receitas/despesas) associadas a categorias.
 
-✅ Relatórios: Gere relatórios financeiros mensais e resumos gerais para visualizar seus gastos.
+✅ Relatórios: Geração de relatórios financeiros mensais e resumos gerais.
 
-✅ Segurança: Acesso a dados pessoais protegido e restrito a cada usuário autenticado.
+✅ Segurança: Acesso a dados restrito por usuário autenticado.
 
 🛠️ Tecnologias Utilizadas
-Backend:
-Spring Boot: Framework principal para o desenvolvimento da aplicação.
-
-Spring Security: Para implementação da segurança e autenticação de usuários.
-
-Spring Data JPA: Para a camada de persistência e integração com o banco de dados.
-
-JWT (JSON Web Tokens): Para a autenticação stateless da API.
-
-Banco de Dados:
-PostgreSQL: Banco de dados relacional utilizado para armazenar os dados.
-
-Segurança de Senhas:
-BCrypt: Algoritmo para criptografia segura de senhas.
-
-Documentação e Build:
-Springdoc-openapi (Swagger): Geração de documentação interativa para a API.
-
-Maven: Gerenciador de dependências e build do projeto.
+<p align="center">
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Java-21-orange%3Fstyle%3Dfor-the-badge%26logo%3Dopenjdk%26logoColor%3Dwhite" />
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Spring_Boot-3.3.0-6DB33F%3Fstyle%3Dfor-the-badge%26logo%3Dspring-boot%26logoColor%3Dwhite" />
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Spring_Security-6.3-6DB33F%3Fstyle%3Dfor-the-badge%26logo%3Dspring-security%26logoColor%3Dwhite" />
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/PostgreSQL-42475E%3Fstyle%3Dfor-the-badge%26logo%3Dpostgresql%26logoColor%3Dwhite" />
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/JWT-000000%3Fstyle%3Dfor-the-badge%26logo%3Djsonwebtokens%26logoColor%3Dwhite" />
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Maven-C71A36%3Fstyle%3Dfor-the-badge%26logo%3Dapache-maven%26logoColor%3Dwhite" />
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Swagger-85EA2D%3Fstyle%3Dfor-the-badge%26logo%3Dswagger%26logoColor%3Dblack" />
+</p>
 
 ⚙️ Guia de Instalação e Execução
 Siga os passos abaixo para configurar e executar o projeto localmente.
@@ -66,55 +62,40 @@ Maven 3.8 ou superior.
 
 PostgreSQL instalado e em execução.
 
-Um cliente de API como o Postman ou o Insomnia para testar os endpoints.
+Um cliente de API como o Postman ou o Insomnia.
 
 2. Configuração do Banco de Dados
-Crie um Banco de Dados:
-No PostgreSQL, crie uma nova base de dados. Por exemplo, com o nome task_finance.
+Crie a Base de Dados:
+No PostgreSQL, crie uma nova base de dados com o nome task_finance.
 
 Configure a Conexão:
-Abra o ficheiro src/main/resources/application.properties e atualize as seguintes propriedades com os seus dados de acesso ao PostgreSQL:
+Abra o ficheiro src/main/resources/application.properties e atualize com os seus dados:
 
 spring.datasource.url=jdbc:postgresql://localhost:5432/task_finance
 spring.datasource.username=seu_usuario_postgres
 spring.datasource.password=sua_senha_postgres
 
-Popule as Categorias Iniciais (Obrigatório):
-Para que o cadastro de transações funcione, é necessário ter categorias no banco de dados. Execute o seguinte script SQL na sua base de dados:
+Popule as Categorias (Obrigatório):
+Execute o seguinte script SQL na sua base de dados para criar as categorias iniciais:
 
--- Insere as novas categorias
-INSERT INTO category (name) VALUES ('Alimentação');
-INSERT INTO category (name) VALUES ('Transporte');
-INSERT INTO category (name) VALUES ('Lazer');
-INSERT INTO category (name) VALUES ('Moradia');
-INSERT INTO category (name) VALUES ('Salário');
+INSERT INTO category (name) VALUES ('Alimentação'), ('Transporte'), ('Lazer'), ('Moradia'), ('Salário');
 
-3. Clonando o Repositório
-Clone este repositório para sua máquina local:
+3. Executando a Aplicação
+Clone o Repositório:
 
 git clone [https://github.com/seu-usuario/task-finance-management-system.git](https://github.com/seu-usuario/task-finance-management-system.git)
 cd task-finance-management-system
 
-4. Executando a Aplicação
-Você pode executar a aplicação de duas formas:
-
-Via Terminal (com Maven Wrapper):
+Execute a Aplicação (via Maven Wrapper):
 
 ./mvnw spring-boot:run
-
-Pela sua IDE (IntelliJ/Eclipse):
-
-Importe o projeto como um projeto Maven.
-
-Encontre a classe TaskFinanceApplication.java e execute o método main.
 
 A API estará disponível em http://localhost:8080.
 
 🔌 Como Usar a API
-1. Autenticação
-Primeiro, crie um usuário e faça login para obter um token JWT.
-
-POST /api/auth/register - Cria um novo usuário.
+1. Autenticação e Autorização
+Passo 1: Registre um Usuário
+Faça uma requisição POST para /api/auth/register com o corpo:
 
 {
     "name": "Nome do Utilizador",
@@ -122,7 +103,8 @@ POST /api/auth/register - Cria um novo usuário.
     "password": "senhaSegura123"
 }
 
-POST /api/auth/login - Autentica um usuário e retorna um token JWT.
+Passo 2: Faça Login para Obter o Token
+Faça uma requisição POST para /api/auth/login com o corpo:
 
 {
     "email": "novo.usuario@exemplo.com",
