@@ -5,11 +5,19 @@ import com.example.springproject.model.User;
 import com.example.springproject.repository.UserRepository;
 import com.example.springproject.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AuthService {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserRepository userRepository;
@@ -20,52 +28,29 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private static final int MAX_FAILED_ATTEMPTS = 3;
-
+    @Transactional
     public String login(UserDTO userDTO) {
-        User user = userRepository.findByEmail(userDTO.getEmail());
 
-        if (user == null) {
-            return "Usuário não encontrado";
-        }
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword())
+        );
 
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        if (user.isLocked()) {
-            return "Conta bloqueada devido a muitas tentativas falhas de login";
-        }
+        User user = (User) authentication.getPrincipal();
 
-
-        if (!passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
-
-            user.setFailedAttempts(user.getFailedAttempts() + 1);
-
-
-            if (user.getFailedAttempts() >= MAX_FAILED_ATTEMPTS) {
-                user.setLocked(true);
-                userRepository.save(user);
-                return "Conta bloqueada devido a muitas tentativas falhas de login";
-            }
-
+        if (user.getFailedAttempts() > 0) {
+            user.setFailedAttempts(0);
             userRepository.save(user);
-            return "Credenciais inválidas";
         }
 
-
-        user.setFailedAttempts(0);
-        userRepository.save(user);
-
-        String token = jwtTokenProvider.generateToken(user);
-
-        return "Token gerado com sucesso: " + token;
+        return jwtTokenProvider.generateToken(user);
     }
 
-
     public String register(UserDTO userDTO) {
-
         if (userRepository.findByEmail(userDTO.getEmail()) != null) {
             return "E-mail já está em uso";
         }
-
 
         String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
 
@@ -76,7 +61,6 @@ public class AuthService {
         user.setFailedAttempts(0);
         user.setLocked(false);
 
-
         userRepository.save(user);
 
         return "Usuário registrado com sucesso";
@@ -86,3 +70,4 @@ public class AuthService {
         return "Usuário deslogado";
     }
 }
+
